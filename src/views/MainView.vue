@@ -282,7 +282,6 @@ h2 {
 .place {
   width: 1.8rem;
   height: 1.8rem;
-  transition: 0.5s;
 }
 
 .tipo1,
@@ -292,5 +291,9 @@ h2 {
 
 .tipo0 {
   background-color: var(--empty);
+}
+
+.tipo3 {
+  background-color: var(--fruit);
 }
 </style>

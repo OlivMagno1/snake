@@ -7,6 +7,7 @@
   --filled: #44633f;
   --background: #3f4b3b;
   --empty: #5a9367;
+  --fruit: #6a0136;
 }
 
 * {
