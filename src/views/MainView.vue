@@ -22,14 +22,32 @@ export default {
   setup() {
     //Configurações de funcionamento
     const playing = ref(false);
-    const speed = ref(750);
+    const speed = ref(500);
     var intervalID;
 
     //Dados do jogador
     const score = ref(0);
     const direction = ref(1);
     const lastDirection = ref(1);
-    const player = ref([20, 5]);
+    let player = [
+      [20, 5],
+      [19, 5],
+      [18, 5],
+    ];
+    let clearPlayer = [
+      [20, 5],
+      [19, 5],
+      [18, 5],
+    ];
+    var playerSize = 3;
+
+    function playerNextPos() {
+      return Object.assign({}, player[playerSize - 1]);
+    }
+
+    function playerLastPos() {
+      return Object.assign({}, player[0]);
+    }
 
     //Mapa
     const map = ref([
@@ -51,8 +69,8 @@ export default {
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ]);
@@ -77,8 +95,8 @@ export default {
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
@@ -102,16 +120,19 @@ export default {
     const getPoint = () => {
       score.value = score.value + 1;
       addPosition();
+      player[playerSize] = Object.assign({}, player[playerSize - 1]);
+      playerSize = playerSize + 1;
+      if (speed.value > 100) speed.value = speed.value - 33;
     };
 
     //Reseta o estado do jogo, deveria funcionar todas as vezes, mas algo não está certo
     const reset = () => {
-      clearInterval(intervalID);
       score.value = 0;
       playing.value = false;
-      map.value = clearMap;
-      player.value = [20, 5];
+      map.value = Object.assign({}, clearMap);
+      player = Object.assign({}, clearPlayer);
       direction.value = 1;
+      return;
     };
 
     //Começa o jogo
@@ -119,97 +140,58 @@ export default {
       if (playing.value == false) {
         addPosition();
         playing.value = true;
-        intervalID = setInterval(function () {
-          move();
+        moveOuter();
+      }
+    };
+
+    const moveInner = () => {
+      if (playing.value == true) {
+        intervalID = setTimeout(function () {
+          moveOuter();
         }, speed.value);
       }
     };
 
-    const move = () => {
+    const moveOuter = () => {
       if (direction.value == 1) {
-        moveup();
+        move(-1, 0, moveInner);
         lastDirection.value = 1;
       } else if (direction.value == 2) {
-        moveright();
+        move(0, 1, moveInner);
         lastDirection.value = 2;
       } else if (direction.value == 3) {
-        movedown();
+        move(1, 0, moveInner);
         lastDirection.value = 3;
       } else if (direction.value == 4) {
-        moveleft();
+        move(0, -1, moveInner);
         lastDirection.value = 4;
       }
     };
 
-    const moveup = () => {
-      if (map.value[player.value[0] - 1][player.value[1]] != 1) {
-        //coletar item e adicionar novo item no mapa
-        if (map.value[player.value[0] - 1][player.value[1]] == 3) {
+    const move = (y, x, callback) => {
+      let nextPos = playerNextPos();
+      let lastPos = playerLastPos();
+      nextPos[0] = nextPos[0] + y;
+      nextPos[1] = nextPos[1] + x;
+      if (
+        map.value[nextPos[0]][nextPos[1]] != 1 &&
+        map.value[nextPos[0]][nextPos[1]] != 2
+      ) {
+        if (map.value[nextPos[0]][nextPos[1]] == 3) {
           getPoint();
         }
-        //movimentação
-        map.value[player.value[0]][player.value[1]] = 0;
-        player.value[0] = player.value[0] - 1;
-        map.value[player.value[0]][player.value[1]] = 2;
+        for (var i = 1; i < playerSize; i++) {
+          player[i - 1] = Object.assign({}, player[i]);
+        }
+        player[playerSize - 1] = Object.assign({}, nextPos);
+        map.value[lastPos[0]][lastPos[1]] = 0;
+        map.value[nextPos[0]][nextPos[1]] = 2;
       } else {
         //atingiu uma parede
         console.log("Fim de jogo");
         reset();
       }
-      return;
-    };
-
-    const movedown = () => {
-      if (map.value[player.value[0] + 1][player.value[1]] != 1) {
-        //coletar item e adicionar novo item no mapa
-        if (map.value[player.value[0] + 1][player.value[1]] == 3) {
-          getPoint();
-        }
-        //movimentação
-        map.value[player.value[0]][player.value[1]] = 0;
-        player.value[0] = player.value[0] + 1;
-        map.value[player.value[0]][player.value[1]] = 2;
-      } else {
-        //atingiu uma parede
-        console.log("Fim de jogo");
-        reset();
-      }
-      return;
-    };
-
-    const moveleft = () => {
-      if (map.value[player.value[0]][player.value[1] - 1] != 1) {
-        //coletar item e adicionar novo item no mapa
-        if (map.value[player.value[0]][player.value[1] - 1] == 3) {
-          getPoint();
-        }
-        //movimentação
-        map.value[player.value[0]][player.value[1]] = 0;
-        player.value[1] = player.value[1] - 1;
-        map.value[player.value[0]][player.value[1]] = 2;
-      } else {
-        //atingiu uma parede
-        console.log("Fim de jogo");
-        reset();
-      }
-      return;
-    };
-
-    const moveright = () => {
-      if (map.value[player.value[0]][player.value[1] + 1] != 1) {
-        //coletar item e adicionar novo item no mapa
-        if (map.value[player.value[0]][player.value[1] + 1] == 3) {
-          getPoint();
-        }
-        //movimentação
-        map.value[player.value[0]][player.value[1]] = 0;
-        player.value[1] = player.value[1] + 1;
-        map.value[player.value[0]][player.value[1]] = 2;
-      } else {
-        //atingiu uma parede
-        console.log("Fim de jogo");
-        reset();
-      }
+      callback();
       return;
     };
 
@@ -240,11 +222,7 @@ export default {
       getPoint,
       reset,
       begin,
-      move,
-      moveup,
-      movedown,
-      moveleft,
-      moveright,
+      moveOuter,
     };
   },
 };
@@ -294,6 +272,7 @@ h2 {
 }
 
 .tipo3 {
+  border-radius: 0.25rem;
   background-color: var(--fruit);
 }
 </style>
