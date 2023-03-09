@@ -22,6 +22,11 @@
   margin: 0;
 }
 
+@font-face {
+  src: url("@/assets/fonts/TiltNeon.ttf");
+  font-family: "TiltNeon";
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
