@@ -1,13 +1,21 @@
 <template>
   <div>
     <div v-show="!playing" class="pause">
-      <h2>Pressione a barra de espaço para começar</h2>
+      <h2>{{ text }}</h2>
     </div>
-    <h1>{{ score }}</h1>
-    <div v-for="(line, yindex) in map" :key="yindex" class="line">
-      <span v-for="(item, xindex) in line" :key="xindex" class="outer place">
-        <span class="place" :class="`tipo${item}`" />
-      </span>
+    <div v-show="playing">
+      <div class="scorePlace">
+        <h1>{{ score }}</h1>
+      </div>
+      <div v-for="(line, yindex) in map" :key="yindex" class="line">
+        <span
+          v-for="(item, xindex) in line"
+          :key="xindex"
+          class="place"
+          :class="`tipo${item}`"
+        >
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +30,7 @@ export default {
     const speed = ref(400);
     const speedStep = ref(50);
     const score = ref(0);
+    const text = ref("Pressione a barra de espaço para começar");
     var intervalID;
 
     //Dados do jogador
@@ -248,6 +257,10 @@ export default {
         direction.value = 1;
         speed.value = 400;
         speedStep.value = 50;
+        text.value = "Fim de jogo";
+        setTimeout(function () {
+          text.value = "Pressione a barra de espaço para começar";
+        }, 1000);
         //Limpeza do mapa
         for (var j = 0; j < playerSize; j++) {
           map.value[player[j][0]][player[j][1]] = 0;
@@ -261,11 +274,27 @@ export default {
     };
 
     //Começa o jogo
-    const begin = () => {
+    const beginInner = () => {
+      playing.value = true;
+      point = addPosition();
+      moveOuter();
+    };
+
+    const beginOuter = (callback) => {
       if (playing.value == false) {
-        playing.value = true;
-        point = addPosition();
-        moveOuter();
+        callback();
+        setTimeout(function () {
+          text.value = "3";
+          setTimeout(function () {
+            text.value = "2";
+            setTimeout(function () {
+              text.value = "1";
+              setTimeout(function () {
+                callback();
+              }, 300);
+            }, 300);
+          }, 300);
+        }, 10);
       }
     };
 
@@ -323,7 +352,7 @@ export default {
 
     document.addEventListener("keydown", (e) => {
       var tecla = e.key;
-      if (tecla === " ") begin();
+      if (tecla === " ") beginOuter(beginInner);
       else if (tecla === "Enter" && playing.value == true) reset();
       else if (tecla === "ArrowUp" && lastDirection.value != 3)
         direction.value = 1;
@@ -336,6 +365,7 @@ export default {
     });
 
     return {
+      text,
       score,
       speed,
       speedStep,
@@ -349,7 +379,7 @@ export default {
       addPosition,
       getPoint,
       reset,
-      begin,
+      beginOuter,
       moveOuter,
     };
   },
@@ -368,16 +398,29 @@ export default {
   align-items: center;
   justify-content: center;
   z-index: 150;
-  backdrop-filter: blur(4px);
   transition: 0.5s;
 }
 
+.scorePlace {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 50;
+  width: 40.8rem;
+  height: 40.8rem;
+}
+
 h1 {
-  color: var(--empty);
+  font-size: 19.2rem;
+  opacity: 0.2;
+  color: var(--filled);
+  filter: drop-shadow(0 0 20px var(--filled));
 }
 
 h2 {
   color: white;
+  filter: drop-shadow(0 0 5px var(--filled));
 }
 
 p {
@@ -387,10 +430,6 @@ p {
 .line {
   display: flex;
   flex-flow: row nowrap;
-}
-
-.outer {
-  background-color: var(--empty);
 }
 
 .place {
@@ -403,21 +442,24 @@ p {
 .tipo1,
 .tipo2 {
   background-color: var(--filled);
+  filter: drop-shadow(0 0 5px var(--filled));
 }
 
 .tipo0 {
-  background-color: var(--empty);
+  background-color: var(--background);
 }
 
 .tipo3 {
   border-radius: 0.8rem;
   background-color: var(--fruit);
+  filter: drop-shadow(0 0 10px var(--fruit));
   transition: 0.5s;
 }
 
 .tipo4 {
   border-radius: 0.8rem;
   background-color: var(--specialFruit);
+  filter: drop-shadow(0 0 10px var(--specialFruit));
   transition: 0.5s;
 }
 </style>

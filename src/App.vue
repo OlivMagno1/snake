@@ -4,11 +4,18 @@
 
 <style>
 :root {
+  /*
   --filled: #44633f;
   --background: #3f4b3b;
   --empty: #5a9367;
   --fruit: #6a0136;
   --specialFruit: #4c1a57;
+  */
+  --filled: #08f7fe;
+  --background: #000;
+  --empty: #5a9367;
+  --fruit: #fe53bb;
+  --specialFruit: #ad96dc;
 }
 
 * {
