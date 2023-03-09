@@ -19,14 +19,16 @@ export default {
   setup() {
     //Configurações de funcionamento
     const playing = ref(false);
-    const speed = ref(500);
+    const speed = ref(400);
+    const speedStep = ref(50);
+    const score = ref(0);
     var intervalID;
 
     //Dados do jogador
-    const score = ref(0);
     const direction = ref(1);
     const lastDirection = ref(1);
     var point = [1, 1];
+    var specialPoint = [1, 1];
     let player = [
       [16, 16],
       [15, 16],
@@ -203,36 +205,66 @@ export default {
       return pos;
     };
 
+    const addSpecialPosition = () => {
+      var pos = getRandomPosition();
+      while (map.value[pos[1]][pos[0]] != 0) pos = getRandomPosition();
+      map.value[pos[1]][pos[0]] = 4;
+      return pos;
+    };
+
     //Jogador coletou um item
     const getPoint = () => {
       score.value = score.value + 1;
-      point = Object.assign({}, addPosition());
+      point = addPosition();
       player[playerSize] = Object.assign({}, player[playerSize - 1]);
       playerSize = playerSize + 1;
-      if (speed.value > 100) speed.value = speed.value - 33;
+      if (speed.value >= 70) {
+        speed.value = speed.value - speedStep.value;
+        if (speedStep.value > 5) speedStep.value = speedStep.value - 5;
+      }
+      if (score.value % 5 == 0) {
+        specialPoint = addSpecialPosition();
+        setTimeout(function () {
+          map.value[specialPoint[1]][specialPoint[0]] = 0;
+          specialPoint = [1, 1];
+        }, 5000);
+      }
+      return;
+    };
+
+    const getSpecialPoint = () => {
+      score.value = score.value + 5;
+      player[playerSize] = Object.assign({}, player[playerSize - 1]);
+      playerSize = playerSize + 1;
     };
 
     //Reseta o estado do jogo, deveria funcionar todas as vezes, mas algo não está certo
     const reset = () => {
-      clearTimeout(intervalID);
-      //Limpeza das configurações
-      playing.value = false;
-      score.value = 0;
-      direction.value = 1;
-      //Limpeza do mapa
-      for (var j = 0; j < playerSize; j++) {
-        map.value[player[j][0]][player[j][1]] = 0;
+      if (playing.value == true) {
+        clearTimeout(intervalID);
+        //Limpeza das configurações
+        playing.value = false;
+        score.value = 0;
+        direction.value = 1;
+        speed.value = 400;
+        speedStep.value = 50;
+        //Limpeza do mapa
+        for (var j = 0; j < playerSize; j++) {
+          map.value[player[j][0]][player[j][1]] = 0;
+        }
+        map.value[point[1]][point[0]] = 0;
+        map.value[specialPoint[1]][specialPoint[0]] = 0;
+        player = Object.assign({}, clearPlayer);
+        playerSize = 3;
+        return;
       }
-      map.value[point[1]][point[0]] = 0;
-      player = Object.assign({}, clearPlayer);
-      return;
     };
 
     //Começa o jogo
     const begin = () => {
       if (playing.value == false) {
-        point = Object.assign({}, addPosition());
         playing.value = true;
+        point = addPosition();
         moveOuter();
       }
     };
@@ -272,6 +304,8 @@ export default {
       ) {
         if (map.value[nextPos[0]][nextPos[1]] == 3) {
           getPoint();
+        } else if (map.value[nextPos[0]][nextPos[1]] == 4) {
+          getSpecialPoint();
         }
         for (var i = 1; i < playerSize; i++) {
           player[i - 1] = Object.assign({}, player[i]);
@@ -303,6 +337,8 @@ export default {
 
     return {
       score,
+      speed,
+      speedStep,
       player,
       map,
       direction,
@@ -344,6 +380,10 @@ h2 {
   color: white;
 }
 
+p {
+  color: white;
+}
+
 .line {
   display: flex;
   flex-flow: row nowrap;
@@ -372,5 +412,12 @@ h2 {
 .tipo3 {
   border-radius: 0.8rem;
   background-color: var(--fruit);
+  transition: 0.5s;
+}
+
+.tipo4 {
+  border-radius: 0.8rem;
+  background-color: var(--specialFruit);
+  transition: 0.5s;
 }
 </style>
