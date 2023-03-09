@@ -8,6 +8,7 @@
   --background: #3f4b3b;
   --empty: #5a9367;
   --fruit: #6a0136;
+  --specialFruit: #4c1a57;
 }
 
 * {
@@ -28,18 +29,5 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>
