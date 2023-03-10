@@ -3,7 +3,7 @@
     <div v-show="!playing" class="pause">
       <h1 :class="{ countdown: bAnim }">{{ text }}</h1>
     </div>
-    <div v-show="playing" :class="{ animate: gather }">
+    <div v-show="playing" :class="{ gather: anim }">
       <div class="scorePlace">
         <h2>{{ score }}</h2>
         <h3 v-show="specialSpawned">+{{ specialValue }}</h3>
@@ -28,8 +28,8 @@ export default {
   setup() {
     //Configurações de funcionamento
     const playing = ref(false);
-    const speed = ref(400);
-    const speedStep = ref(50);
+    const speed = ref(200);
+    const speedStep = ref(25);
     const score = ref(0);
     const text = ref("Pressione a barra de espaço para começar");
     const anim = ref(false);
@@ -182,9 +182,9 @@ export default {
       point = addPosition();
       player[playerSize] = Object.assign({}, player[playerSize - 1]);
       playerSize = playerSize + 1;
-      if (speed.value >= 70) {
+      if (speed.value >= 55) {
         speed.value = speed.value - speedStep.value;
-        if (speedStep.value > 5) speedStep.value = speedStep.value - 5;
+        if (speedStep.value > 3) speedStep.value = speedStep.value - 3;
       }
       if (score.value % 5 == 0) {
         specialPoint = addSpecialPosition();
