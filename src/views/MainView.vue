@@ -139,7 +139,8 @@ export default {
           specialLifeDecay();
         }, 1000);
       else {
-        map.value[specialPoint[1]][specialPoint[0]] = "0";
+        if (map.value[specialPoint[1]][specialPoint[0]] == 4)
+          map.value[specialPoint[1]][specialPoint[0]] = "0";
         specialPoint = [1, 1];
         clearTimeout(intervalSID);
       }
