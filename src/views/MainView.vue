@@ -299,8 +299,8 @@ export default {
         if (touchX > 0 && lastDirection.value != 4) direction.value = 2;
         else if (touchX < 0 && lastDirection.value != 2) direction.value = 4;
       } else {
-        if (touchY > 0 && lastDirection.value != 3) direction.value = 1;
-        else if (touchY < 0 && lastDirection.value != 1) direction.value = 3;
+        if (touchY < 0 && lastDirection.value != 3) direction.value = 1;
+        else if (touchY > 0 && lastDirection.value != 1) direction.value = 3;
       }
     }
 
