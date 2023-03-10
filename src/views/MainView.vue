@@ -32,6 +32,12 @@ export default {
     const speedStep = ref(50);
     const score = ref(0);
     const text = ref("Pressione a barra de espaço para começar");
+    let touchstartX = 0;
+    let touchendX = 0;
+    let touchstartY = 0;
+    let touchendY = 0;
+    let touchY = 0;
+    let touchX = 0;
     var intervalID;
     var intervalSID;
 
@@ -194,7 +200,6 @@ export default {
     const beginInner = () => {
       playing.value = true;
       point = addPosition();
-      specialPoint = addSpecialPosition();
       moveOuter();
     };
 
@@ -270,6 +275,7 @@ export default {
       return;
     };
 
+    //keyboard control
     document.addEventListener("keydown", (e) => {
       var tecla = e.key;
       if (tecla === " ") beginOuter(beginInner);
@@ -282,6 +288,35 @@ export default {
         direction.value = 3;
       else if (tecla === "ArrowLeft" && lastDirection.value != 2)
         direction.value = 4;
+    });
+
+    //touch control
+    function checkDirection() {
+      touchX = touchendX - touchstartX;
+      touchY = touchendY - touchstartY;
+      //horizontal move
+      if (Math.abs(touchX) > Math.abs(touchY)) {
+        if (touchX > 0 && lastDirection.value != 4) direction.value = 2;
+        else if (touchX < 0 && lastDirection.value != 2) direction.value = 4;
+      } else {
+        if (touchY > 0 && lastDirection.value != 3) direction.value = 1;
+        else if (touchY < 0 && lastDirection.value != 1) direction.value = 3;
+      }
+    }
+
+    document.addEventListener("touchend", () => {
+      if (playing.value == false) beginOuter(beginInner);
+    });
+
+    document.addEventListener("touchstart", (e) => {
+      touchstartX = e.changedTouches[0].screenX;
+      touchstartY = e.changedTouches[0].screenY;
+    });
+
+    document.addEventListener("touchend", (e) => {
+      touchendX = e.changedTouches[0].screenX;
+      touchendY = e.changedTouches[0].screenY;
+      checkDirection();
     });
 
     return {
