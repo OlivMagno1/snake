@@ -17,13 +17,6 @@ documentHeight();
 
 <style>
 :root {
-  /*
-  --filled: #44633f;
-  --background: #3f4b3b;
-  --empty: #5a9367;
-  --fruit: #6a0136;
-  --specialFruit: #4c1a57;
-  */
   --filled: #02ffe1;
   --background: #000;
   --fruit: #fff;

@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-show="!playing" class="pause">
-      <h1>{{ text }}</h1>
+      <h1 :class="{ countdown: bAnim }">{{ text }}</h1>
     </div>
-    <div v-show="playing">
+    <div v-show="playing" :class="{ animate: gather }">
       <div class="scorePlace">
         <h2>{{ score }}</h2>
         <h3 v-show="specialSpawned">+{{ specialValue }}</h3>
@@ -32,6 +32,8 @@ export default {
     const speedStep = ref(50);
     const score = ref(0);
     const text = ref("Pressione a barra de espaço para começar");
+    const anim = ref(false);
+    const bAnim = ref(false);
     let touchstartX = 0;
     let touchendX = 0;
     let touchstartY = 0;
@@ -167,13 +169,19 @@ export default {
       }
     };
 
+    const animatePoint = () => {
+      anim.value = true;
+      setTimeout(function () {
+        anim.value = false;
+      }, 800);
+    };
+
     //Jogador coletou um item
     const getPoint = () => {
       score.value = score.value + 1;
       point = addPosition();
       player[playerSize] = Object.assign({}, player[playerSize - 1]);
       playerSize = playerSize + 1;
-      changePalette();
       if (speed.value >= 70) {
         speed.value = speed.value - speedStep.value;
         if (speedStep.value > 5) speedStep.value = speedStep.value - 5;
@@ -182,6 +190,8 @@ export default {
         specialPoint = addSpecialPosition();
         specialLifeDecay();
       }
+      changePalette();
+      animatePoint();
       return;
     };
 
@@ -191,6 +201,7 @@ export default {
       playerSize = playerSize + 1;
       specialValue.value = 15;
       specialSpawned.value = false;
+      animatePoint();
     };
 
     //Reseta o estado do jogo, deveria funcionar todas as vezes, mas algo não está certo
@@ -230,15 +241,25 @@ export default {
     const beginOuter = (callback) => {
       if (playing.value == false) {
         setTimeout(function () {
+          bAnim.value = true;
           text.value = "3";
           setTimeout(function () {
-            text.value = "2";
+            bAnim.value = false;
             setTimeout(function () {
-              text.value = "1";
+              bAnim.value = true;
+              text.value = "2";
               setTimeout(function () {
-                callback();
+                bAnim.value = false;
+                setTimeout(function () {
+                  bAnim.value = true;
+                  text.value = "1";
+                  setTimeout(function () {
+                    bAnim.value = false;
+                    callback();
+                  }, 300);
+                }, 10);
               }, 300);
-            }, 300);
+            }, 10);
           }, 300);
         }, 10);
       }
@@ -344,6 +365,8 @@ export default {
     });
 
     return {
+      anim,
+      bAnim,
       text,
       score,
       speed,
@@ -479,5 +502,34 @@ p {
   background-color: var(--fruit);
   filter: drop-shadow(0 0 10px var(--filled));
   transition: 0.5s;
+}
+
+.gather {
+  animation: gather 0.3s;
+}
+
+.countdown {
+  animation: countdown 0.3s;
+}
+
+@keyframes gather {
+  from {
+    transform: scale(1.01);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes countdown {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(10);
+    opacity: 0.3;
+  }
 }
 </style>
