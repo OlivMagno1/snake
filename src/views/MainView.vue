@@ -1,11 +1,12 @@
 <template>
   <div>
     <div v-show="!playing" class="pause">
-      <h2>{{ text }}</h2>
+      <h1>{{ text }}</h1>
     </div>
     <div v-show="playing">
       <div class="scorePlace">
-        <h1>{{ score }}</h1>
+        <h2>{{ score }}</h2>
+        <h3 v-show="specialSpawned">+{{ specialValue }}</h3>
       </div>
       <div v-for="(line, yindex) in map" :key="yindex" class="line">
         <span
@@ -32,12 +33,15 @@ export default {
     const score = ref(0);
     const text = ref("Pressione a barra de espaço para começar");
     var intervalID;
+    var intervalSID;
 
     //Dados do jogador
     const direction = ref(1);
     const lastDirection = ref(1);
     var point = [1, 1];
+    const specialSpawned = ref(false);
     var specialPoint = [1, 1];
+    const specialValue = ref(15);
     let player = [
       [16, 16],
       [15, 16],
@@ -113,10 +117,26 @@ export default {
     };
 
     const addSpecialPosition = () => {
+      specialSpawned.value = true;
+      specialValue.value = 15;
       var pos = getRandomPosition();
       while (map.value[pos[1]][pos[0]] != "0") pos = getRandomPosition();
       map.value[pos[1]][pos[0]] = 4;
       return pos;
+    };
+
+    const specialLifeDecay = () => {
+      if (specialValue.value > 1) specialValue.value = specialValue.value - 1;
+      else specialSpawned.value = false;
+      if (specialSpawned.value == true)
+        intervalSID = setTimeout(function () {
+          specialLifeDecay();
+        }, 1000);
+      else {
+        map.value[specialPoint[1]][specialPoint[0]] = "0";
+        specialPoint = [1, 1];
+        clearTimeout(intervalSID);
+      }
     };
 
     //Jogador coletou um item
@@ -131,18 +151,17 @@ export default {
       }
       if (score.value % 5 == 0) {
         specialPoint = addSpecialPosition();
-        setTimeout(function () {
-          map.value[specialPoint[1]][specialPoint[0]] = 0;
-          specialPoint = [1, 1];
-        }, 5000);
+        specialLifeDecay();
       }
       return;
     };
 
     const getSpecialPoint = () => {
-      score.value = score.value + 5;
+      score.value = score.value + specialValue.value;
       player[playerSize] = Object.assign({}, player[playerSize - 1]);
       playerSize = playerSize + 1;
+      specialValue.value = 15;
+      specialSpawned.value = false;
     };
 
     //Reseta o estado do jogo, deveria funcionar todas as vezes, mas algo não está certo
@@ -175,6 +194,7 @@ export default {
     const beginInner = () => {
       playing.value = true;
       point = addPosition();
+      specialPoint = addSpecialPosition();
       moveOuter();
     };
 
@@ -269,6 +289,8 @@ export default {
       score,
       speed,
       speedStep,
+      specialValue,
+      specialSpawned,
       player,
       map,
       direction,
@@ -312,6 +334,12 @@ export default {
 }
 
 h1 {
+  color: white;
+  filter: drop-shadow(0 0 5px var(--filled));
+  font-family: TiltNeon;
+}
+
+h2 {
   font-size: 19.2rem;
   opacity: 0.2;
   color: var(--filled);
@@ -319,9 +347,14 @@ h1 {
   font-family: TiltNeon;
 }
 
-h2 {
-  color: white;
-  filter: drop-shadow(0 0 5px var(--filled));
+h3 {
+  position: absolute;
+  right: 3.6rem;
+  bottom: 10.8rem;
+  font-size: 7.2rem;
+  opacity: 0.2;
+  color: var(--specialFruit);
+  filter: drop-shadow(0 0 20px var(--specialFruit));
   font-family: TiltNeon;
 }
 
