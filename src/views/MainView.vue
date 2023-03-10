@@ -1,7 +1,8 @@
 <template>
   <div>
     <div v-show="!playing" class="pause">
-      <h1 :class="{ countdown: bAnim }">{{ text }}</h1>
+      <h1 class="desktop" :class="{ countdown: bAnim }">{{ textDesk }}</h1>
+      <h1 class="mobile" :class="{ countdown: bAnim }">{{ textMob }}</h1>
     </div>
     <div v-show="playing" :class="{ gather: anim }">
       <div class="scorePlace">
@@ -31,7 +32,8 @@ export default {
     const speed = ref(200);
     const speedStep = ref(25);
     const score = ref(0);
-    const text = ref("Pressione a barra de espaço para começar");
+    const textDesk = ref("Pressione a barra de espaço para começar");
+    const textMob = ref("Toque na tela para começar");
     const anim = ref(false);
     const bAnim = ref(false);
     let touchstartX = 0;
@@ -214,9 +216,11 @@ export default {
         direction.value = 1;
         speed.value = 400;
         speedStep.value = 50;
-        text.value = "Fim de jogo";
+        textDesk.value = "Fim de jogo";
+        textMob.value = "Fim de jogo";
         setTimeout(function () {
-          text.value = "Pressione a barra de espaço para começar";
+          textDesk.value = ref("Pressione a barra de espaço para começar");
+          textMob.value = ref("Toque na tela para começar");
         }, 1000);
         //Limpeza do mapa
         document.documentElement.style.setProperty("--filled", "#02ffe1");
@@ -242,17 +246,20 @@ export default {
       if (playing.value == false) {
         setTimeout(function () {
           bAnim.value = true;
-          text.value = "3";
+          textDesk.value = "3";
+          textMob.value = "3";
           setTimeout(function () {
             bAnim.value = false;
             setTimeout(function () {
               bAnim.value = true;
-              text.value = "2";
+              textDesk.value = "2";
+              textMob.value = "2";
               setTimeout(function () {
                 bAnim.value = false;
                 setTimeout(function () {
                   bAnim.value = true;
-                  text.value = "1";
+                  textDesk.value = "1";
+                  textMob.value = "1";
                   setTimeout(function () {
                     bAnim.value = false;
                     callback();
@@ -367,7 +374,8 @@ export default {
     return {
       anim,
       bAnim,
-      text,
+      textDesk,
+      textMob,
       score,
       speed,
       speedStep,
@@ -391,6 +399,17 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (min-width: 1000px) {
+  .mobile {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .desktop {
+    display: none;
+  }
+}
 .pause {
   position: absolute;
   top: 0;
