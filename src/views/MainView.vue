@@ -148,22 +148,22 @@ export default {
 
     const changePalette = () => {
       var doc = getComputedStyle(document.documentElement);
-      if (doc.getPropertyValue("--filled") == " #02ffe1") {
-        document.documentElement.style.setProperty("--filled", " #00ff28");
-      } else if (doc.getPropertyValue("--filled") == " #00ff28") {
-        document.documentElement.style.setProperty("--filled", " #fffc02");
-      } else if (doc.getPropertyValue("--filled") == " #fffc02") {
-        document.documentElement.style.setProperty("--filled", " #ff7b02");
-      } else if (doc.getPropertyValue("--filled") == " #ff7b02") {
-        document.documentElement.style.setProperty("--filled", " #ff0202");
-      } else if (doc.getPropertyValue("--filled") == " #ff0202") {
-        document.documentElement.style.setProperty("--filled", " #ff0063");
-      } else if (doc.getPropertyValue("--filled") == " #ff0063") {
-        document.documentElement.style.setProperty("--filled", " #cc00ff");
-      } else if (doc.getPropertyValue("--filled") == " #cc00ff") {
-        document.documentElement.style.setProperty("--filled", " #000aff");
-      } else if (doc.getPropertyValue("--filled") == " #000aff") {
-        document.documentElement.style.setProperty("--filled", " #02ffe1");
+      if (doc.getPropertyValue("--filled") == "#02ffe1") {
+        document.documentElement.style.setProperty("--filled", "#00ff28");
+      } else if (doc.getPropertyValue("--filled") == "#00ff28") {
+        document.documentElement.style.setProperty("--filled", "#fffc02");
+      } else if (doc.getPropertyValue("--filled") == "#fffc02") {
+        document.documentElement.style.setProperty("--filled", "#ff7b02");
+      } else if (doc.getPropertyValue("--filled") == "#ff7b02") {
+        document.documentElement.style.setProperty("--filled", "#ff0202");
+      } else if (doc.getPropertyValue("--filled") == "#ff0202") {
+        document.documentElement.style.setProperty("--filled", "#ff0063");
+      } else if (doc.getPropertyValue("--filled") == "#ff0063") {
+        document.documentElement.style.setProperty("--filled", "#cc00ff");
+      } else if (doc.getPropertyValue("--filled") == "#cc00ff") {
+        document.documentElement.style.setProperty("--filled", "#000aff");
+      } else if (doc.getPropertyValue("--filled") == "#000aff") {
+        document.documentElement.style.setProperty("--filled", "#02ffe1");
       }
     };
 
