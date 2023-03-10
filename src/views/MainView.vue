@@ -208,7 +208,7 @@ export default {
           text.value = "Pressione a barra de espaço para começar";
         }, 1000);
         //Limpeza do mapa
-        document.documentElement.style.setProperty("--filled", " #02ffe1");
+        document.documentElement.style.setProperty("--filled", "#02ffe1");
         for (var j = 0; j < playerSize; j++) {
           map.value[player[j][0]][player[j][1]] = 0;
         }
