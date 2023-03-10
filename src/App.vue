@@ -2,6 +2,19 @@
   <router-view />
 </template>
 
+<script>
+//Begin vh fix
+const documentHeight = () => {
+  const doc = document.documentElement;
+  var vh = window.innerHeight * 0.01;
+  doc.style.setProperty("--doc-vh", `${vh}px`);
+};
+
+window.addEventListener("resize", documentHeight);
+documentHeight();
+//End vh fix
+</script>
+
 <style>
 :root {
   /*
@@ -16,6 +29,7 @@
   --empty: #5a9367;
   --fruit: #fe53bb;
   --specialFruit: #ad96dc;
+  --doc-vh: 0;
 }
 
 * {
@@ -39,7 +53,7 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: calc(100 * var(--doc-vh));
   width: 100vw;
 }
 </style>
