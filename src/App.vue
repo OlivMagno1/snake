@@ -16,6 +16,9 @@ documentHeight();
 </script>
 
 <style>
+html {
+  overscroll-behavior: none;
+}
 :root {
   /*
   --filled: #44633f;
@@ -55,6 +58,5 @@ documentHeight();
   justify-content: center;
   height: calc(100 * var(--doc-vh));
   width: 100vw;
-  overscroll-behavior: none;
 }
 </style>
