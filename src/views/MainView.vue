@@ -146,12 +146,34 @@ export default {
       }
     };
 
+    const changePalette = () => {
+      var doc = getComputedStyle(document.documentElement);
+      if (doc.getPropertyValue("--filled") == " #02ffe1") {
+        document.documentElement.style.setProperty("--filled", " #00ff28");
+      } else if (doc.getPropertyValue("--filled") == " #00ff28") {
+        document.documentElement.style.setProperty("--filled", " #fffc02");
+      } else if (doc.getPropertyValue("--filled") == " #fffc02") {
+        document.documentElement.style.setProperty("--filled", " #ff7b02");
+      } else if (doc.getPropertyValue("--filled") == " #ff7b02") {
+        document.documentElement.style.setProperty("--filled", " #ff0202");
+      } else if (doc.getPropertyValue("--filled") == " #ff0202") {
+        document.documentElement.style.setProperty("--filled", " #ff0063");
+      } else if (doc.getPropertyValue("--filled") == " #ff0063") {
+        document.documentElement.style.setProperty("--filled", " #cc00ff");
+      } else if (doc.getPropertyValue("--filled") == " #cc00ff") {
+        document.documentElement.style.setProperty("--filled", " #000aff");
+      } else if (doc.getPropertyValue("--filled") == " #000aff") {
+        document.documentElement.style.setProperty("--filled", " #02ffe1");
+      }
+    };
+
     //Jogador coletou um item
     const getPoint = () => {
       score.value = score.value + 1;
       point = addPosition();
       player[playerSize] = Object.assign({}, player[playerSize - 1]);
       playerSize = playerSize + 1;
+      changePalette();
       if (speed.value >= 70) {
         speed.value = speed.value - speedStep.value;
         if (speedStep.value > 5) speedStep.value = speedStep.value - 5;
@@ -389,8 +411,8 @@ h3 {
   bottom: clamp(4.5rem, 0.3rem + 21vw, 10.8rem);
   font-size: clamp(2.9rem, 0.033rem + 14.3vw, 7.2rem);
   opacity: 0.2;
-  color: var(--specialFruit);
-  filter: drop-shadow(0 0 20px var(--specialFruit));
+  color: var(--fruit);
+  filter: drop-shadow(0 0 10px var(--filled));
   font-family: TiltNeon;
 }
 
@@ -446,15 +468,15 @@ p {
 
 .tipo3 {
   border-radius: 0.8rem;
-  background-color: var(--fruit);
-  filter: drop-shadow(0 0 10px var(--fruit));
+  background-color: var(--filled);
+  filter: drop-shadow(0 0 10px var(--filled));
   transition: 0.5s;
 }
 
 .tipo4 {
   border-radius: 0.8rem;
-  background-color: var(--specialFruit);
-  filter: drop-shadow(0 0 10px var(--specialFruit));
+  background-color: var(--fruit);
+  filter: drop-shadow(0 0 10px var(--filled));
   transition: 0.5s;
 }
 </style>

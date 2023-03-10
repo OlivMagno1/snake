@@ -24,11 +24,9 @@ documentHeight();
   --fruit: #6a0136;
   --specialFruit: #4c1a57;
   */
-  --filled: #08f7fe;
+  --filled: #02ffe1;
   --background: #000;
-  --empty: #5a9367;
-  --fruit: #fe53bb;
-  --specialFruit: #ad96dc;
+  --fruit: #fff;
   --doc-vh: 0;
 }
 
