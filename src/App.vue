@@ -16,9 +16,6 @@ documentHeight();
 </script>
 
 <style>
-html {
-  overscroll-behavior: none;
-}
 :root {
   /*
   --filled: #44633f;
@@ -37,6 +34,7 @@ html {
 
 * {
   margin: 0;
+  overscroll-behavior: none;
 }
 
 @font-face {
