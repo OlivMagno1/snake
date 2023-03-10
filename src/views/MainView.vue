@@ -208,6 +208,7 @@ export default {
           text.value = "Pressione a barra de espaço para começar";
         }, 1000);
         //Limpeza do mapa
+        document.documentElement.style.setProperty("--filled", " #02ffe1");
         for (var j = 0; j < playerSize; j++) {
           map.value[player[j][0]][player[j][1]] = 0;
         }
@@ -398,7 +399,7 @@ h1 {
 }
 
 h2 {
-  font-size: clamp(8rem, 0.533rem + 37.3vw, 19.2rem);
+  font-size: clamp(6.8rem, 0.453rem + 31.7vw, 16.3rem);
   opacity: 0.2;
   color: var(--filled);
   filter: drop-shadow(0 0 20px var(--filled));
@@ -408,8 +409,8 @@ h2 {
 h3 {
   position: absolute;
   right: clamp(1.5rem, 0.1rem + 7vw, 3.6rem);
-  bottom: clamp(4.5rem, 0.3rem + 21vw, 10.8rem);
-  font-size: clamp(2.9rem, 0.033rem + 14.3vw, 7.2rem);
+  bottom: clamp(5.5rem, 0.367rem + 25.7vw, 13.2rem);
+  font-size: clamp(2rem, 0.067rem + 9.67vw, 4.9rem);
   opacity: 0.2;
   color: var(--fruit);
   filter: drop-shadow(0 0 10px var(--filled));
