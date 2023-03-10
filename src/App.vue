@@ -55,5 +55,6 @@ documentHeight();
   justify-content: center;
   height: calc(100 * var(--doc-vh));
   width: 100vw;
+  overscroll-behavior: none;
 }
 </style>
