@@ -364,8 +364,8 @@ export default {
   justify-content: center;
   position: absolute;
   z-index: 50;
-  width: 40.8rem;
-  height: 40.8rem;
+  width: clamp(17rem, 1.133rem + 79.3vw, 40.8rem);
+  height: clamp(17rem, 1.133rem + 79.3vw, 40.8rem);
 }
 
 h1 {
@@ -375,7 +375,7 @@ h1 {
 }
 
 h2 {
-  font-size: 19.2rem;
+  font-size: clamp(8rem, 0.533rem + 37.3vw, 19.2rem);
   opacity: 0.2;
   color: var(--filled);
   filter: drop-shadow(0 0 20px var(--filled));
@@ -384,9 +384,9 @@ h2 {
 
 h3 {
   position: absolute;
-  right: 3.6rem;
-  bottom: 10.8rem;
-  font-size: 7.2rem;
+  right: clamp(1.5rem, 0.1rem + 7vw, 3.6rem);
+  bottom: clamp(4.5rem, 0.3rem + 21vw, 10.8rem);
+  font-size: clamp(2.9rem, 0.033rem + 14.3vw, 7.2rem);
   opacity: 0.2;
   color: var(--specialFruit);
   filter: drop-shadow(0 0 20px var(--specialFruit));
@@ -406,8 +406,8 @@ p {
 .place {
   display: flex;
   flex-flow: row nowrap;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: clamp(0.5rem, 0.033rem + 2.3vw, 1.2rem);
+  height: clamp(0.5rem, 0.033rem + 2.3vw, 1.2rem);
 }
 
 .tipon,
